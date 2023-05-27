@@ -3,22 +3,22 @@ namespace ShortenUrl.Service;
 
 public class ShortenUrlServiceService :IShortenUrlService
 {
-    private readonly ShortIdProvider _idProvider;
+    private readonly IShortIdProvider _idProvider;
 
-    public ShortenUrlServiceService(ShortIdProvider idProvider)
+    public ShortenUrlServiceService(IShortIdProvider idProvider)
     {
         _idProvider = idProvider;
     }
 
-    public Uri GenerateShortUrl(Uri baseDomain,int idSize)
+    public Uri GenerateShortUrl(string baseDomain,int idSize)
     {
         
-        return new Uri(baseDomain + _idProvider.Generate(idSize));
+        return new Uri($"{baseDomain}/{_idProvider.Generate(idSize)}",UriKind.RelativeOrAbsolute);
     }
 }
 
 public interface IShortenUrlService
 {
     
-    Uri GenerateShortUrl(Uri baseDomain,int idSize);
+    Uri GenerateShortUrl(string baseDomain,int idSize);
 }

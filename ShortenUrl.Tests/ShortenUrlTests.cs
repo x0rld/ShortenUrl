@@ -5,7 +5,7 @@ namespace ShortenUrl.Tests;
 public class ShortenUrlTests
 {
     private readonly IShortenUrlService _sut;
-    private readonly Uri _uri = new ("https://google.com");
+    private readonly string _uri = "https://google.com";
     public ShortenUrlTests()
     {
         _sut = new ShortenUrlServiceService(new ShortIdProvider(new Random(50)));
