@@ -4,7 +4,6 @@ using ShortenUrl.Service;
 
 namespace ShortenUrl.Endpoint;
 
-// ReSharper disable ClassNeverInstantiated.Global
 public record UriRequest(Uri Uri, int Size);
 
 public record UriReponse(Uri Uri);
