@@ -10,15 +10,15 @@ public class ShortenUrlServiceService :IShortenUrlService
         _idProvider = idProvider;
     }
 
-    public Uri GenerateShortUrl(string baseDomain,int idSize)
+    public  (Uri shortendUrl,string Key) GenerateShortUrl(string baseDomain,int idSize)
     {
-        
-        return new Uri($"{baseDomain}/{_idProvider.Generate(idSize)}",UriKind.RelativeOrAbsolute);
+        var key = _idProvider.Generate(idSize);
+        return (new Uri($"{baseDomain}/{key}", UriKind.RelativeOrAbsolute), key);
     }
 }
 
 public interface IShortenUrlService
 {
     
-    Uri GenerateShortUrl(string baseDomain,int idSize);
+    (Uri shortendUrl,string Key) GenerateShortUrl(string baseDomain,int idSize);
 }

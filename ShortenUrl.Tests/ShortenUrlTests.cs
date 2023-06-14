@@ -15,15 +15,14 @@ public class ShortenUrlTests
     [Fact]
     public void GetShortUrl_Should_Return_An_Uri_Not_Null()
     {
-        var actual = _sut.GenerateShortUrl(Uri,1);
-        Check.That(actual).IsNotNull().And.IsInstanceOfType(typeof(Uri));
+        var (actualUri,_)= _sut.GenerateShortUrl(Uri,1);
+        Check.That(actualUri).IsNotNull();
     }
     
     [Fact]
-    public void GetShortUrl_Should_Return_An_String_With_Length_10()
+    public void GetShortUrl_Should_Return_An_Url_With_A_Key_Of_Length_10()
     {
-        var actual = _sut.GenerateShortUrl(Uri,10);
-        var absolutePath = actual.AbsolutePath;
-        Check.That(absolutePath[1..absolutePath.Length].Length).Is(10);
+        var (_,actualKey) = _sut.GenerateShortUrl(Uri,10);
+        Check.That(actualKey.Length).Is(10);
     }
 }
