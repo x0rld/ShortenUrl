@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <PublishAot>true</PublishAot>
+        <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,6 +12,9 @@
       <PackageReference Include="FastEndpoints.Swagger" Version="5.11.0" />
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
       <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.5" />
+      <PackageReference Include="Serilog" Version="3.0.1" />
+      <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
       <PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     </ItemGroup>
 </Project>

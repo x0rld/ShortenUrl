@@ -18,7 +18,7 @@ public class DatabaseRepository : IDatabaseRepository
         var parameters = new DynamicParameters();
         parameters.Add("@Id", id);
         var result =
-            await _dbConnection.QueryFirstOrDefaultAsync<T>("select * from storedUrl where id=@Id", parameters);
+            await _dbConnection.QueryFirstOrDefaultAsync<T>("select id,website from storedUrl where id=@Id", parameters);
         return result;
     }
 
@@ -33,11 +33,7 @@ public class DatabaseRepository : IDatabaseRepository
 }
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public record StoredUrl(string Id, string Website)
-{
-    // ReSharper disable once UnusedMember.Local
-    private StoredUrl()  : this(default!, default!) { }
-};
+public record StoredUrl(string Id, string Website);
 
 public interface IDatabaseRepository
 {

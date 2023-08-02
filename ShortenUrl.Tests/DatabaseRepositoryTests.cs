@@ -31,13 +31,12 @@ public class DatabaseRepositoryTests : IDisposable
     }
       
     [Fact]
-    public async Task InsertAsync_Should_Not_Throw_An_Exception_When_Id_Doesnt_Exist()
+    public void InsertAsync_Should_Not_Throw_An_Exception_When_Id_Doesnt_Exist()
     {
         Check.ThatCode(async () => await _sut.InsertAsync(new StoredUrl("4563", "https://twitch.tv/merry")))
             .DoesNotThrow();
     }
-
-
+    
     private void Dispose(bool disposing)
     {
         _transaction.Rollback();
