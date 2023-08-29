@@ -1,8 +1,5 @@
 import {Create} from "./Create.tsx";
-
-function Search() {
-    return null;
-}
+import {Search} from "./Search.tsx";
 
 function App() {
 

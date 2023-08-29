@@ -15,7 +15,7 @@ public class AccessToUrl : EndpointWithoutRequest<string>
     }
     public override void Configure()
     {
-        Get("/{Id}");
+        Get(new []{"/{Id}", "/"});
         AllowAnonymous();
     }
 
@@ -24,13 +24,13 @@ public class AccessToUrl : EndpointWithoutRequest<string>
         var id = Route<string>("Id");
         if (string.IsNullOrEmpty(id))
         {
-            await SendErrorsAsync(cancellation: ct);
+            await SendNotFoundAsync(ct); 
             return;
         }
         var website = await _databaseRepository.QueryAsync<StoredUrl>(id);
         if (website is null)
         {
-            await SendNotFoundAsync(ct);
+            await SendNotFoundAsync(ct);            
             _logger.Error("id {} not found in the database",id);
             return;
         }
@@ -41,6 +41,7 @@ public class AccessToUrl : EndpointWithoutRequest<string>
             _logger.Information("the website with the id {Id} is {Url}",id,website.Website);
             return;
         }
+        HttpContext.Response.Headers["Access-Control-Expose-Headers"] = "Location";
         await SendRedirectAsync(website.Website,false,ct);
     }
 }

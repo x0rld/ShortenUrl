@@ -22,8 +22,8 @@ public class ShortenUrlValidator : Validator<UriRequest>
             .WithMessage("malforned url"); 
     }
 
-    private static bool CheckValidWebsiteUrl(Uri it)
+    private static bool CheckValidWebsiteUrl(Uri url)
     {
-        return Uri.TryCreate(it,it, out var result) && !ValidScheme.Contains(result.Scheme);
+        return Uri.TryCreate(url,url, out var result) && !ValidScheme.Contains(result.Scheme);
     }
 }

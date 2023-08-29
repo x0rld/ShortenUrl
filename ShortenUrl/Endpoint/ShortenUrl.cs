@@ -28,21 +28,10 @@ public class ShortenUrl : Endpoint<UriRequest, UriReponse>
 
     public override async Task HandleAsync(UriRequest request, CancellationToken ct)
     {
-
-        if (!Uri.TryCreate(request.Url,request.Url, out var result) &&result?.Scheme is not ("https" or "http"))
-        {
-            AddError(new ValidationFailure
-            {
-                ErrorCode = 400.ToString(),
-                ErrorMessage = "malformed url x",
-                PropertyName = nameof(request.Url),
-            });
-        }
-        var requestHost = HttpContext.Request;
-        var baseDomain = $"{requestHost.Scheme}://{requestHost.Host.Value}";
-        var (shortUrl,key) = _shortenUrlService.GenerateShortUrl(baseDomain, request.Size);
-        var storedUrl = new StoredUrl(key, request.Url.ToString());
+        var baseDomain = "https://" +HttpContext.Request.Host.Value;
+        var (shortUrl,token) = _shortenUrlService.GenerateShortUrl(baseDomain, request.Size);
+        var storedUrl = new StoredUrl(token, request.Url.ToString());
         await _databaseRepository.InsertAsync(storedUrl);
-        await SendAsync(new UriReponse(shortUrl), (int) HttpStatusCode.Created, ct);
+        await SendCreatedAtAsync<AccessToUrl>(shortUrl,new UriReponse(shortUrl),cancellation:ct);
     }
 }

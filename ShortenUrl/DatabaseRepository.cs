@@ -17,8 +17,8 @@ public class DatabaseRepository : IDatabaseRepository
     {
         var parameters = new DynamicParameters();
         parameters.Add("@Id", id);
-        var result =
-            await _dbConnection.QueryFirstOrDefaultAsync<T>("select id,website from storedUrl where id=@Id", parameters);
+        var result = await _dbConnection.
+            QueryFirstOrDefaultAsync<T>("select id,website from storedUrl where id=@Id", parameters);
         return result;
     }
 

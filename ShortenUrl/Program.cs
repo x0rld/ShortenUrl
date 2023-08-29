@@ -1,9 +1,12 @@
 global using FastEndpoints;
+using System.Data;
+using Dapper;
 using FastEndpoints.Swagger;
 using Microsoft.Data.Sqlite;
 using ShortenUrl;
 using ShortenUrl.Service;
 using Serilog;
+using SQLitePCL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,12 +15,11 @@ builder.Host.UseSerilog((_, configuration) =>
         .WriteTo.RollingFile("Logs/shortenURl.log",
             outputTemplate: "{Timestamp:dd-MM-yyyy HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}")
         .WriteTo.Console());
-builder.Services.AddSingleton<IShortIdProvider, ShortIdProvider>(_ => new ShortIdProvider(new Random()));
-builder.Services.AddSingleton<IShortenUrlService, ShortenUrlServiceService>(provider => new ShortenUrlServiceService(
-    provider.GetRequiredService<IShortIdProvider>()));
-builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>(
-    _ => new DatabaseRepository(new SqliteConnection("Data Source= shortURL.sqlite"))
-);
+builder.Services.AddSingleton<IDbConnection>(it => new SqliteConnection("Data Source= shortURL2.sqlite") );
+builder.Services.AddScoped(it => new Random() );
+builder.Services.AddScoped<IShortIdProvider, ShortIdProvider>();
+builder.Services.AddScoped<IShortenUrlService, ShortenUrlServiceService>();
+builder.Services.AddScoped<IDatabaseRepository, DatabaseRepository>();
 builder.Services.AddCors(options => options.AddPolicy("corsLocalPolicy",
     policyBuilder =>
     {
@@ -44,6 +46,20 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerGen();
 }
+await InitDatabase();
 
 app.UseSerilogRequestLogging();
 app.Run();
+
+async Task InitDatabase()
+{
+    var dbConnection = app.Services.GetRequiredService<IDbConnection>();
+    dbConnection.Open();
+    var initSqlScript = await File.ReadAllTextAsync("init.sql");
+    var isExist = await dbConnection.QueryFirstOrDefaultAsync<bool>("SELECT 1 FROM sqlite_master WHERE type='table' AND name='storedUrl'");
+    if (isExist)
+    {
+     return;   
+    }
+    await dbConnection.QueryAsync(initSqlScript);
+}
