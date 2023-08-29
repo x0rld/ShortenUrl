@@ -36,7 +36,7 @@ builder.Services.SwaggerDocument(o =>
 });
 builder.Services.AddFastEndpoints();
 
-var app = builder.Build();;
+var app = builder.Build();
 await new Setup(app.Services.GetRequiredService<IDbConnection>()).InitDatabase();
 app.UseCors("corsLocalPolicy");
 app.UseDefaultExceptionHandler();
