@@ -36,8 +36,8 @@ builder.Services.SwaggerDocument(o =>
 });
 builder.Services.AddFastEndpoints();
 
-var app = builder.Build();
-
+var app = builder.Build();;
+await new Setup(app.Services.GetRequiredService<IDbConnection>()).InitDatabase();
 app.UseCors("corsLocalPolicy");
 app.UseDefaultExceptionHandler();
 app.UseAuthorization();
@@ -46,20 +46,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerGen();
 }
-await InitDatabase();
 
 app.UseSerilogRequestLogging();
 app.Run();
-
-async Task InitDatabase()
-{
-    var dbConnection = app.Services.GetRequiredService<IDbConnection>();
-    dbConnection.Open();
-    var initSqlScript = await File.ReadAllTextAsync("init.sql");
-    var isExist = await dbConnection.QueryFirstOrDefaultAsync<bool>("SELECT 1 FROM sqlite_master WHERE type='table' AND name='storedUrl'");
-    if (isExist)
-    {
-     return;   
-    }
-    await dbConnection.QueryAsync(initSqlScript);
-}

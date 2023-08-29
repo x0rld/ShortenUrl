@@ -12,6 +12,7 @@ public class DatabaseRepositoryTests : IDisposable
     public DatabaseRepositoryTests()
     {
         var connection = new SqliteConnection("Data Source=shortURLTest.sqlite");
+        new Setup(connection).InitDatabase().GetAwaiter().GetResult();
         connection.Open();
         SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
         _transaction = connection.BeginTransaction();
