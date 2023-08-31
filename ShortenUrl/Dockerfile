@@ -8,5 +8,5 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "ShortenUrl.dll", "--urls http://0.0.0.0:8080"]
+ENTRYPOINT ["dotnet", "ShortenUrl.dll"]
  
