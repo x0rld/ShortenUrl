@@ -31,17 +31,16 @@ public class AccessToUrl : EndpointWithoutRequest<string>
         if (website is null)
         {
             await SendNotFoundAsync(ct);            
-            _logger.Error("id {} not found in the database",id);
+            _logger.Error("id {Id} not found in the database",id);
             return;
         }
+        _logger.Information("the website with the id {Id} is {Url}",id,website.Website);
         
         if (HttpContext.Request.Headers.TryGetValue("referer", out var referer) && referer[0]!.Contains("swagger"))
         {
             await SendAsync(new {website.Website }.ToString()!, StatusCodes.Status302Found,ct);
-            _logger.Information("the website with the id {Id} is {Url}",id,website.Website);
             return;
         }
-        HttpContext.Response.Headers["Access-Control-Expose-Headers"] = "Location";
         await SendRedirectAsync(website.Website,false,ct);
     }
 }
