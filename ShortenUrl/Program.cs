@@ -15,7 +15,7 @@ builder.Host.UseSerilog((_, configuration) =>
         .WriteTo.RollingFile("Logs/shortenURl.log",
             outputTemplate: "{Timestamp:dd-MM-yyyy HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}")
         .WriteTo.Console());
-builder.Services.AddSingleton<IDbConnection>(it => new SqliteConnection("Data Source= shortURL2.sqlite") );
+builder.Services.AddSingleton<IDbConnection>(it => new SqliteConnection("Data Source= shortURL.sqlite") );
 builder.Services.AddScoped(it => new Random() );
 builder.Services.AddScoped<IShortIdProvider, ShortIdProvider>();
 builder.Services.AddScoped<IShortenUrlService, ShortenUrlServiceService>();

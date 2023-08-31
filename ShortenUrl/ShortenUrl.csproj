@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,6 +21,9 @@
     <ItemGroup>
       <None Update="init.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update=".dockerignore">
+        <DependentUpon>Dockerfile</DependentUpon>
       </None>
     </ItemGroup>
 </Project>
