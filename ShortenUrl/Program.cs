@@ -1,13 +1,10 @@
 global using FastEndpoints;
 using System.Data;
-using Dapper;
 using FastEndpoints.Swagger;
 using Microsoft.Data.Sqlite;
 using ShortenUrl;
 using ShortenUrl.Service;
 using Serilog;
-using SQLitePCL;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((_, configuration) =>
