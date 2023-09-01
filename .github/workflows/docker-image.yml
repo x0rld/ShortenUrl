@@ -12,8 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        name: Build the Docker image
       - run: |
           cd ShortenUrl 
           docker build . --tag short-url-api:$(date +%s)
-          docker login rg.fr-par.scw.cloud/short-url-registry -u nologin --password-stdin <<< ${{secrets.SCW_SECRET_KEY}}
-        name: Build the Docker image
+          docker login rg.fr-par.scw.cloud/short-url-registry -u nologin --password-stdin <<< "${{secrets.SCW_SECRET_KEY}}"
