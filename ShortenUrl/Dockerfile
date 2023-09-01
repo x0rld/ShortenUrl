@@ -6,7 +6,7 @@ RUN dotnet publish "ShortenUrl.csproj" -c Release -o /app/publish /p:UseAppHost=
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine3.18 
 WORKDIR /app
 COPY --from=publish /app/publish .
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT ["dotnet", "ShortenUrl.dll"]
  
