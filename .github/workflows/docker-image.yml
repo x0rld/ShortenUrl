@@ -7,13 +7,11 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - run: |
           cd ShortenUrl 
           docker build . --tag short-url-api:$(date +%s)
-          docker login rg.fr-par.scw.cloud/short-url-registry -u nologin --password-stdin <<< ${{secrets.SCW_SECRET_KEY}}
+          docker login rg.fr-par.scw.cloud/ -u nologin -p ${{secrets.SCW_SECRET_KEY}}
         name: Build the Docker image
