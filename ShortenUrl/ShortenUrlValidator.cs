@@ -6,7 +6,7 @@ namespace ShortenUrl;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class ShortenUrlValidator : Validator<UriRequest>
 {
-    private static readonly string[] ValidScheme = {"http", "https"};
+    private static readonly string[] ValidScheme = {Uri.UriSchemeHttps, Uri.UriSchemeHttp};
     public ShortenUrlValidator()
     {
         RuleFor(x => x.Size)
@@ -24,6 +24,6 @@ public class ShortenUrlValidator : Validator<UriRequest>
 
     private static bool CheckValidWebsiteUrl(Uri url)
     {
-        return Uri.TryCreate(url,url, out var result) && ValidScheme.Contains(result.Scheme);
+        return Uri.TryCreate(url, url, out var result) && ValidScheme.Contains(result.Scheme);
     }
 }
