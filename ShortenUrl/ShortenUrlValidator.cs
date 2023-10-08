@@ -19,7 +19,7 @@ public class ShortenUrlValidator : Validator<UriRequest>
             .NotEmpty()
             .WithMessage("the url must be set")
             .Must(CheckValidWebsiteUrl)
-            .WithMessage("malforned url"); 
+            .WithMessage("malformed url"); 
     }
 
     private static bool CheckValidWebsiteUrl(Uri url)
