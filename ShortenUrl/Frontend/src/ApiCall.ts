@@ -20,7 +20,8 @@ export const createShortlink = async (payload: urlInfo): Promise<CreateResponse>
         {
             method: "POST",
             body: JSON.stringify(payload),
-            headers: new Headers({'content-type': 'application/json'}),
+            headers: new Headers({'content-type': 'application/json',
+            }),
         })
     if (response.ok) {
         const result = await response.json()
@@ -65,5 +66,4 @@ export interface QueryResponse {
     url: URL
 }
 
-
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "https://localhost:7056";
