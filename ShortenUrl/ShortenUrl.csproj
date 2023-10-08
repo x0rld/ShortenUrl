@@ -3,7 +3,8 @@
     <PropertyGroup>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+        <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,5 +26,10 @@
       <None Update=".dockerignore">
         <DependentUpon>Dockerfile</DependentUpon>
       </None>
+      <None Remove="Frontend\dist\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Frontend\dist\**" />
     </ItemGroup>
 </Project>

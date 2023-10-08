@@ -5,24 +5,25 @@ using Microsoft.Data.Sqlite;
 using ShortenUrl;
 using ShortenUrl.Service;
 using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(it => it.AddServerHeader = false);
+
+builder.Services.AddDependencyInjection();
 builder.Host.UseSerilog((_, configuration) =>
     configuration.Enrich.FromLogContext()
         .WriteTo.RollingFile("Logs/shortenURl.log",
             outputTemplate: "{Timestamp:dd-MM-yyyy HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}")
         .WriteTo.Console());
-builder.Services.AddSingleton<IDbConnection>(it => new SqliteConnection("Data Source= shortURL.sqlite") );
-builder.Services.AddScoped(it => new Random() );
-builder.Services.AddScoped<IShortIdProvider, ShortIdProvider>();
-builder.Services.AddScoped<IShortenUrlService, ShortenUrlServiceService>();
-builder.Services.AddScoped<IDatabaseRepository, DatabaseRepository>();
-builder.Services.AddCors(options => options.AddPolicy("corsLocalPolicy",
+
+builder.Services.AddCors(options => options.AddPolicy("corsPolicy",
     policyBuilder =>
     {
-        policyBuilder.AllowAnyOrigin()
-            .AllowAnyHeader().AllowAnyMethod();
+        policyBuilder.AllowAnyMethod().WithHeaders("content-type","access-control-allow-origin")
+            .WithOrigins("http://localhost:5173","https://react-short-url.netlify.app");
     }));
+
 builder.Services.SwaggerDocument(o =>
 {
     o.DocumentSettings = s =>
@@ -35,9 +36,8 @@ builder.Services.AddFastEndpoints();
 
 var app = builder.Build();
 await new Setup(app.Services.GetRequiredService<IDbConnection>()).InitDatabase();
-app.UseCors("corsLocalPolicy");
+app.UseCors("corsPolicy");
 app.UseDefaultExceptionHandler();
-app.UseAuthorization();
 app.UseFastEndpoints();
 if (app.Environment.IsDevelopment())
 {
@@ -46,3 +46,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging();
 app.Run();
+
+internal static class Extension
+{
+    public static void AddDependencyInjection(this IServiceCollection services)
+    {
+        services.AddSingleton<IDbConnection>(it => new SqliteConnection("Data Source= shortURL.sqlite"));
+        services.AddScoped(_ => new Random());
+        services.AddScoped<IShortIdProvider, ShortIdProvider>();
+        services.AddScoped<IShortenUrlService, ShortenUrlServiceService>();
+        services.AddScoped<IDatabaseRepository, DatabaseRepository>();
+    }
+}
