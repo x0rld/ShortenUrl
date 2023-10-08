@@ -24,29 +24,41 @@ export function Create() {
             return;
         }
         if (url)
-        createShortlink({url, size}).then(response => {
-            if (!response.success) {
-                setErrors([...response.errors.url, response.errors.size].filter(it => it != undefined))
-                return
-            }
-            setLink(response.url)
-        })
+            createShortlink({url, size}).then(response => {
+                if (!response.success) {
+                    setErrors([...response.errors.url, response.errors.size].filter(it => it != undefined))
+                    return
+                }
+                setErrors([])
+                setLink(response.url)
+            })
     }
     return <>
-        <div style={{color: 'red'}}>
-            <ul>
-                {
-                    errors.map((it: string) => <li key={it}>{it}</li>)
-                }
-            </ul>
+        <div className="flex justify-center ">
+            <div className="flex-col m-5">
+                <div className="card w-96 bg-neutral text-neutral-content">
+                    <div className="card-body items-center text-center">
+                        <form>
+                            <Input name={"url"} type={"text"} placeholder={"https://google.com"} key={"url"} min={0}
+                                   value={url}
+                                   handler={setUrl} required={true}/>
+                            <Input name="size" type="number" min={10} placeholder="token size" value={size.toString()}
+                                   handler={setSize} required={true}/>
+                            <button onClick={submit} className="btn m-1">short url!</button>
+                        </form>
+                    </div>
+                </div>
+                <div className="text-red-600 text-center m-2">
+                    <ul>
+                        {
+                            errors.map((it: string) => <li key={it}>{it}</li>)
+                        }
+                    </ul>
+                </div>
+                <div className="text-center underline hover:cursor-auto">
+                    <a href={link?.toString()}>{link?.toString()}</a>
+                </div>
+            </div>
         </div>
-        <form>
-            <Input name={"url"} type={"text"} placeholder={"https://google.com"} key={"url"} min={0} value={url}
-                   handler={setUrl} required={true}/>
-            <Input name="size" type="number" min={10} placeholder="token size" value={size.toString()}
-                   handler={setSize} required={true}/>
-            <button onClick={submit}>short url!</button>
-        </form>
-        <a href={link?.toString()}>{link?.toString()}</a>
     </>;
 }

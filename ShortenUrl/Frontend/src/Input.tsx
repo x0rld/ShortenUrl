@@ -13,6 +13,7 @@ export function Input(attributes: formAttributes) {
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         attributes.handler(e.target.value)
     }
+    const className= "m-1 input-bordered flex";
     if (attributes.type === "number")
         return <><label htmlFor={attributes.name}>{attributes.name}</label>
             <input name={attributes.name}
@@ -22,7 +23,10 @@ export function Input(attributes: formAttributes) {
                    min={attributes.min}
                    value={attributes.value}
                    required={attributes.required}
-                   onChange={onChangeHandler}/></>;
+                   onChange={onChangeHandler}
+                   className={className}
+            />
+        </>;
 
     return <><label htmlFor={attributes.name}>{attributes.name}</label>
         <input name={attributes.name}
@@ -30,5 +34,7 @@ export function Input(attributes: formAttributes) {
                type={attributes.type}
                required={attributes.required}
                placeholder={attributes.placeholder}
-               onChange={onChangeHandler}/></>;
+               onChange={onChangeHandler}
+               className={className}
+        /></>;
 }
