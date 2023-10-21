@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AspNetCore.HealthChecks.UI" Version="7.0.2" />
       <PackageReference Include="Dapper" Version="2.0.123" />
       <PackageReference Include="FastEndpoints" Version="5.11.0" />
       <PackageReference Include="FastEndpoints.Swagger" Version="5.11.0" />
