@@ -20,8 +20,8 @@ builder.Host.UseSerilog((_, configuration) =>
 builder.Services.AddCors(options => options.AddPolicy("corsPolicy",
     policyBuilder =>
     {
-        policyBuilder.AllowAnyMethod().WithHeaders("content-type","access-control-allow-origin")
-            .WithOrigins("http://localhost:5173","https://react-short-url.netlify.app");
+        policyBuilder.AllowAnyMethod().WithHeaders("content-type", "access-control-allow-origin")
+            .WithOrigins("http://localhost:5173", "https://react-short-url.netlify.app");
     }));
 
 builder.Services.SwaggerDocument(o =>
@@ -39,6 +39,7 @@ await new Setup(app.Services.GetRequiredService<IDbConnection>()).InitDatabase()
 app.UseCors("corsPolicy");
 app.UseDefaultExceptionHandler();
 app.UseFastEndpoints();
+app.UseHealthChecks("/health");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerGen();
@@ -56,5 +57,6 @@ internal static class Extension
         services.AddScoped<IShortIdProvider, ShortIdProvider>();
         services.AddScoped<IShortenUrlService, ShortenUrlServiceService>();
         services.AddScoped<IDatabaseRepository, DatabaseRepository>();
+        services.AddHealthChecks();
     }
 }
