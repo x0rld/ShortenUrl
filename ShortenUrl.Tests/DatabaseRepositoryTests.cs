@@ -1,6 +1,8 @@
 ﻿using System.Data.Common;
 using Dapper;
 using Microsoft.Data.Sqlite;
+using NFluent;
+using Xunit;
 
 namespace ShortenUrl.Tests;
 
@@ -28,7 +30,7 @@ public class DatabaseRepositoryTests : IDisposable
     {
         var expected= new StoredUrl("1234", "https://twitch.tv/merry");
         var actual = await _sut.QueryAsync<StoredUrl>("1234");
-        Check.That(actual).IsEqualTo(expected);
+        Assert.Equal(expected, actual);
     }
       
     [Fact]
